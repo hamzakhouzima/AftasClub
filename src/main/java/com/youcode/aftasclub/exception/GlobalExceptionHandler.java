@@ -19,8 +19,8 @@ public class GlobalExceptionHandler {
         ApiError apiError = new ApiError(
                 LocalDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
+                "Competition Not Found!!",
                 "Competition Not Found",
-                ex.getMessage(),
                 request.getDescription(false));
 
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);

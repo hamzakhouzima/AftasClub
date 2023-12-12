@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "competitions")
@@ -35,5 +37,9 @@ public class Competition {
 
     @Column
     private long amount;
+
+    @ManyToMany(mappedBy = "competitions")
+    private List<Member> members = new ArrayList<>();
+
 
 }

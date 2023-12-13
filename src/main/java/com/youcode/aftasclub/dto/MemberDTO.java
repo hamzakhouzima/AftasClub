@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Setter
 @ToString
 public class MemberDTO {
+
     private Long id;
 
     @NotBlank(message = "First name is required")

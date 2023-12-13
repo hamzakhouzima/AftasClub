@@ -1,6 +1,27 @@
 package com.youcode.aftasclub.service;
 
+import com.youcode.aftasclub.dto.CompetitionDTO;
+import com.youcode.aftasclub.model.Competition;
+import com.youcode.aftasclub.model.Member;
+
+import java.util.List;
+import java.util.Optional;
+
 public interface CompetitionService {
-    public void registerCompetition();
+     void registerCompetition(CompetitionDTO competition);
+
+     Competition findCompetitionById(Long id);
+
+     Competition updateCompetition(CompetitionDTO competition , Competition updatedCompetition);
+
+     void deleteCompetition(Competition competition);
+
+     void addParticipantToCompetition(Long id, Long participantId);
+
+     void removeParticipantFromCompetition(Long id, Long participantId);
+
+     Optional<Member> getParticipantById(Long id, Long participantId);
+
+     List<Competition> getOnGoingCompetition();
 
 }

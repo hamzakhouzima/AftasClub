@@ -26,15 +26,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void registerMember(MemberDTO member) throws DuplicateRegistrationException {
-        try{
-            memberRepository.save(EntityDtoConverter.convertToEntity(member , Member.class));
-        }  catch(Exception e){
-
-            throw new DuplicateRegistrationException("Error caused by "+e);
-
+        if (memberRepository.existsById(member.getId())) {
+            throw new DuplicateRegistrationException("Member already exists");
         }
-
-    }
+        try {
+            memberRepository.save(EntityDtoConverter.convertToEntity(member, Member.class));
+        } catch (Exception e) {
+            throw new RuntimeException("Error occurred while registering member", e);
+        }    }
 
     @Override
     public Member getMemberById(Long id) {

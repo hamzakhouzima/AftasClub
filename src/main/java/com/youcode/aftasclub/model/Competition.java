@@ -32,11 +32,14 @@ public class Competition {
 
     @Column
     private Integer numberOfParticipants;
+
     @Column
     private String Location;
 
+
+
     @Column
-    private long amount;
+    private double amount;
 //
 //    @OneToMany(mappedBy = "memberCompetitionDetails")
 //    private List<Member> members = new ArrayList<>();

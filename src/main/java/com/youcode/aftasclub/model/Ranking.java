@@ -2,10 +2,13 @@ package com.youcode.aftasclub.model;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "ranking")
-
+@Getter
+@Setter
 
 public class Ranking {
     @Id

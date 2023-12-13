@@ -37,9 +37,9 @@ public class Competition {
 
     @Column
     private long amount;
-
-    @ManyToMany(mappedBy = "competitions")
-    private List<Member> members = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "memberCompetitionDetails")
+//    private List<Member> members = new ArrayList<>();
 
 
 }

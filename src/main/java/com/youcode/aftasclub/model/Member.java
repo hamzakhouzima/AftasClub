@@ -23,11 +23,15 @@ public class Member {
 
     // num : integer
 
-    @Column
-    private String FirstName;
+    @Column(name ="first_name")
+    private String firstName;
 
-    @Column
-    private String LastName;
+    @Column(name ="last_name")
+    private String lastName;
+
+
+    @Column(name="identity_number")
+    private String identityNumber;
 
     @Column
     private Date accessDate;
@@ -40,16 +44,19 @@ public class Member {
         CIN, PASSPORT , CART_RESIDENCE
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "member_competition",
-            joinColumns = @JoinColumn(name = "member_id"),
-            inverseJoinColumns = @JoinColumn(name = "competition_id")
-    )
-    private List<Competition> competitions = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(
+//            name = "member_competition",
+//            joinColumns = @JoinColumn(name = "member_id"),
+//            inverseJoinColumns = @JoinColumn(name = "competition_id")
+//    )
+
+    @OneToMany(mappedBy = "member")
+    private List<Ranking> memberCompetitionDetails = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private Set<Hunting> hunting = new HashSet<>(); // Use Set for collections to avoid duplicates
+
 
 
 }

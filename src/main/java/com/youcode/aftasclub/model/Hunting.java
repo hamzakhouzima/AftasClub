@@ -13,6 +13,10 @@ public class Hunting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "fish_number")
+    private Integer fishNumber;
+
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;

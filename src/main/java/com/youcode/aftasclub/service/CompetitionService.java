@@ -12,7 +12,8 @@ public interface CompetitionService {
 
      Competition findCompetitionById(Long id);
 
-     Competition updateCompetition(CompetitionDTO competition , Competition updatedCompetition);
+     Competition updateCompetition(Competition updatedCompetition, String competitionCode);
+
 
      void deleteCompetition(Competition competition);
 
@@ -24,4 +25,5 @@ public interface CompetitionService {
 
      List<Competition> getOnGoingCompetition();
 
+     Competition findCompetitionByCode(String code);
 }

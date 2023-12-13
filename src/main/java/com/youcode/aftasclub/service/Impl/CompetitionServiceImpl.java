@@ -11,7 +11,9 @@ import com.youcode.aftasclub.repository.CompetitionRepository;
 import com.youcode.aftasclub.repository.MemberRepository;
 import com.youcode.aftasclub.repository.RankingRepository;
 import com.youcode.aftasclub.service.CompetitionService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
-
+@Service
 public class CompetitionServiceImpl implements CompetitionService {
 
     EntityDtoConverter EDC = new EntityDtoConverter();
@@ -37,16 +39,43 @@ public class CompetitionServiceImpl implements CompetitionService {
 
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    public static String generateRandomString(int length) {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            char randomChar = CHARACTERS.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+        System.out.println("Random String: " + sb.toString());
+        return sb.toString();
+    }
 
 
     @Override
     public void registerCompetition(CompetitionDTO competition) {
-        if (!competitionRepository.existsById(competition.getId())) {
-            throw new CompetitionNotFoundException("Competition not found");
+        if (competitionRepository.existsByCode(competition.getCode())) {
+            throw new CompetitionNotFoundException("Competition Already exist:::");
         } else {
+            competition.setCode(generateRandomString(7));
+
+
             competitionRepository.save(EDC.convertToEntity(competition , Competition.class));
+
+            //TODO : should set the code with random code using the bellow randomString method \/\/
         }
     }
+
+    public Competition findCompetitionByCode(String code) {
+        try {
+            return competitionRepository.findByCode(code);
+        }catch(Exception e){
+            throw new CompetitionNotFoundException("Competition Not Found");
+        }
+
+    }
+
 
     @Override
     public Competition findCompetitionById(Long id) {
@@ -54,11 +83,14 @@ public class CompetitionServiceImpl implements CompetitionService {
             return null;
     }
 
+
+
     @Override
-    public Competition updateCompetition(CompetitionDTO competition, Competition updatedCompetition) {
-        Optional<Competition> optionalCompetition = competitionRepository.findById(competition.getId());
-        if (((Optional<?>) optionalCompetition).isPresent()) {
-            Competition existingCompetition = optionalCompetition.get();
+    @Transactional
+    public Competition updateCompetition(Competition updatedCompetition, String competitionCode) {
+        Competition existingCompetition = competitionRepository.findByCode(competitionCode);
+//existingCompetition is the old competition
+        if (existingCompetition != null) {
             existingCompetition.setDate(updatedCompetition.getDate());
             existingCompetition.setAmount(updatedCompetition.getAmount());
             existingCompetition.setLocation(updatedCompetition.getLocation());
@@ -66,16 +98,19 @@ public class CompetitionServiceImpl implements CompetitionService {
             existingCompetition.setEndTime(updatedCompetition.getEndTime());
             existingCompetition.setNumberOfParticipants(updatedCompetition.getNumberOfParticipants());
 
+            // Save the updated entity using the repository
             try {
-                competitionRepository.save(existingCompetition);
-                return existingCompetition;
+                Competition savedCompetition = competitionRepository.save(existingCompetition);
+                return savedCompetition;
             } catch (Exception e) {
                 e.printStackTrace();
+                throw new RuntimeException("Failed to update competition");
             }
         }
 
-        throw new RuntimeException("Failed to update competition");
+        throw new CompetitionNotFoundException("Competition with code " + competitionCode + " not found");
     }
+
 
     @Override
     public void deleteCompetition(Competition competition) {
@@ -120,7 +155,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Optional<Member> getParticipantById(Long id, Long participantId) {
-        return Optional.ofNullable(Optional.ofNullable(rankingRepository.findByIdAndParticipantId(id, participantId))
+        return Optional.ofNullable(Optional.ofNullable(rankingRepository.findByIdAndMemberId(id, participantId))
                 .flatMap(MemberRecord -> memberRepository.findById(MemberRecord.getId()))
                 .orElseThrow(() -> new RuntimeException("Participant not found")));
     }
@@ -139,17 +174,5 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
 
-    public static String generateRandomString(int length) {
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder(length);
-
-        for (int i = 0; i < length; i++) {
-            int randomIndex = random.nextInt(CHARACTERS.length());
-            char randomChar = CHARACTERS.charAt(randomIndex);
-            sb.append(randomChar);
-        }
-
-        return sb.toString();
-    }
 
 }

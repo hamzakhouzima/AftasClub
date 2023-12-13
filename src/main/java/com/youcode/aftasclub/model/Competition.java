@@ -27,6 +27,7 @@ public class Competition {
 
     @Column
     private Time startTime;
+
     @Column
     private Time endTime;
 
@@ -36,11 +37,10 @@ public class Competition {
     @Column
     private String Location;
 
-
-
     @Column
     private double amount;
-//
+
+
 //    @OneToMany(mappedBy = "memberCompetitionDetails")
 //    private List<Member> members = new ArrayList<>();
 

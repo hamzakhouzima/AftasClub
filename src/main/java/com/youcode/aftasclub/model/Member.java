@@ -44,12 +44,7 @@ public class Member {
         CIN, PASSPORT , CART_RESIDENCE
     }
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "member_competition",
-//            joinColumns = @JoinColumn(name = "member_id"),
-//            inverseJoinColumns = @JoinColumn(name = "competition_id")
-//    )
+
 
     @OneToMany(mappedBy = "member")
     private List<Ranking> memberCompetitionDetails = new ArrayList<>();

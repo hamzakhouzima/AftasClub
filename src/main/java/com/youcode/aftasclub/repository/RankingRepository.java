@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RankingRepository extends JpaRepository<Ranking, Long> {
 
-    Member findByIdAndParticipantId(Long id, Long participantId);
+    Member findByIdAndMemberId(Long id, Long MemberId);
 }

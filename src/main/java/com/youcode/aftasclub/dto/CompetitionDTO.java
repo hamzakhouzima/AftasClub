@@ -1,5 +1,7 @@
 package com.youcode.aftasclub.dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -13,9 +15,15 @@ import java.util.Date;
 
 @Getter
 @Setter
+@Builder
 public class CompetitionDTO {
 
-    private Long id;
+
+
+//    private Long id;
+
+
+//    @NotBlank(message = "Name is required")
     @NotBlank(message = "Code is required")
     private String code;
 

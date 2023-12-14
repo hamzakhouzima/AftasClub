@@ -1,6 +1,8 @@
 package com.youcode.aftasclub.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,10 +48,14 @@ public class Member {
 
 
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+//    @JsonManagedReference
     private List<Ranking> memberCompetitionDetails = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+
+
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+//    @JsonManagedReference
     private Set<Hunting> hunting = new HashSet<>(); // Use Set for collections to avoid duplicates
 
 

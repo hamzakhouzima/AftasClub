@@ -36,6 +36,22 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
 
     }
+
+
+
+
+
+    @ExceptionHandler(RegistrationClosedException.class)
+    public ResponseEntity<ApiError> handleRegistrationClosed(RegistrationClosedException ex, WebRequest request) {
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Registration closed",
+                ex.getMessage(),
+                request.getDescription(true));
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+
+    }
     @ExceptionHandler(InvalidDataException.class)
     public ResponseEntity<ApiError> handleInvalidDataException(InvalidDataException ex, WebRequest request) {
         ApiError apiError = new ApiError(
@@ -47,16 +63,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RegisterationClosedException.class)
-    public ResponseEntity<ApiError> handleRegistrationClosedException(RegisterationClosedException ex, WebRequest request) {
-        ApiError apiError = new ApiError(
-                LocalDateTime.now(),
-                HttpStatus.FORBIDDEN.value(),
-                "Registration Closed",
-                ex.getMessage(),
-                request.getDescription(false));
-        return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
-    }
+//    @ExceptionHandler(RegisterationClosedException.class)
+//    public ResponseEntity<ApiError> handleRegistrationClosedException(RegisterationClosedException ex, WebRequest request) {
+//        ApiError apiError = new ApiError(
+//                LocalDateTime.now(),
+//                HttpStatus.FORBIDDEN.value(),
+//                "Registration Closed",
+//                ex.getMessage(),
+//                request.getDescription(false));
+//        return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
+//    }
 
 
     @ExceptionHandler(DuplicateRegistrationException.class)

@@ -1,14 +1,18 @@
 package com.youcode.aftasclub.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "ranking")
+
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 
 public class Ranking {
     @Id
@@ -23,15 +27,16 @@ public class Ranking {
     @Column(name = "score")
     private Integer score;
 
-
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_id")
-    private Competition competitionId;
+    private Competition competition;
+
 
 
 }

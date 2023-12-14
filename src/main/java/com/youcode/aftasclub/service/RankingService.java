@@ -1,15 +1,18 @@
 package com.youcode.aftasclub.service;
 
+import com.youcode.aftasclub.dto.RankingDTO;
+import com.youcode.aftasclub.model.Competition;
+import com.youcode.aftasclub.model.Member;
 import com.youcode.aftasclub.model.Ranking;
 
 public interface RankingService {
 
-    void addParticipantToCompetition(Long competitionId, Long participantId);
+    void addParticipantToCompetition(Competition competitionId, Member participantID);
 
-    void removeParticipantFromCompetition(Long competitionId, Long participantId);
+    void removeParticipantFromCompetition(Competition competitionId, Member participantId);
 
 
-    Ranking getParticipantRank(Long competitionId, Long participantId);
+    RankingDTO getParticipantRank(Competition code, Member participantId);
 
     Ranking updateParticipantRank(Ranking ranking);
 

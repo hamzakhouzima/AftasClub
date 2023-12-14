@@ -137,7 +137,7 @@ public class CompetitionServiceImpl implements CompetitionService {
                 .orElseThrow(() -> new MemberNotFoundException("Participant not found"));
 
         Ranking ranking = new Ranking();
-        ranking.setCompetitionId(competition);
+        ranking.setCompetition(competition);
         ranking.setMember(participant);
         try {
             rankingRepository.save(ranking);

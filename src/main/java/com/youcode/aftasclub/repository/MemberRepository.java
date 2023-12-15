@@ -15,10 +15,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 //    Member findByCode(String code);
     Member findMemberByFirstNameAndLastName(String firstName, String lastName);
+//TODO :
+//    @Query("SELECT m FROM Member m WHERE m.identityNumber = :identityNumber")
+//    List<Member> findMembersByIdentityNumber(@Param("identityNumber") String identityNumber);
 
-    @Query("SELECT m FROM Member m WHERE m.identityNumber = :identityNumber")
-    List<Member> findMembersByIdentityNumber(@Param("identityNumber") String identityNumber);
-
+    Member findByIdentityNumber(String identityNumber);
 
 
 //    @Query(name = "org.springframework.data.jpa.repository.query.Procedure")

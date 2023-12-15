@@ -12,9 +12,11 @@ public interface MemberService {
 
     Member getMemberById(Long id);
 
-    List<Member> getMemberByCode(String code);
+    Member getMemberByCode(String code);
 
     void updateMember(Long id, Member member);
+
+    Member findMembersByIdentityNumber(String identityNumber);
 
     void deleteMember(Member member);
 }

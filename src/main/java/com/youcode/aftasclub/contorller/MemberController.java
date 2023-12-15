@@ -9,10 +9,9 @@ import com.youcode.aftasclub.service.Impl.MemberServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.web.servlet.function.ServerResponse.badRequest;
 
@@ -28,6 +27,22 @@ private MemberServiceImpl memberService;
             memberService.registerMember(memberDTO);
             return ResponseEntity.ok(memberDTO);
         } catch (DuplicateRegistrationException e) {
+            System.out.println("Error caused by " + e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+
+    @GetMapping("/searchMember/{identityNumber}")
+    public ResponseEntity<Member> getMemberByCode(@PathVariable String identityNumber) {
+        try {
+            Member member = memberService.getMemberByCode(identityNumber);
+            if (member == null) {
+                return ResponseEntity.notFound().build();
+            } else {
+                return ResponseEntity.ok(member);
+            }
+        } catch (Exception e) {
             System.out.println("Error caused by " + e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

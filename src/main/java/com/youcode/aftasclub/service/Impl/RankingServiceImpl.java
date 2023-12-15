@@ -16,6 +16,8 @@ import com.youcode.aftasclub.service.RankingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.StyledEditorKit;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +31,18 @@ public class RankingServiceImpl implements RankingService {
     CompetitionRepository competitionRepository;
 
 //    EntityDtoConverter.convertToDto(Competition competition, Competition.class);
-ConvertToDTO convertToDTO;
+    ConvertToDTO convertToDTO;
+
+        //TODO : this should be done
+//    public Boolean beforeTwentyFourHours() {
+//        Date now = new Date();
+//        Date competitionStartDate = Competition.getStartTime() ;// get the competition start date here
+//        long difference = competitionStartDate.getTime() - now.getTime();
+//        long twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
+//        return difference < twentyFourHoursInMillis;
+//    }
+//
+
 
     @Override
     public void addParticipantToCompetition(Competition competition, Member participant) {
@@ -76,7 +89,7 @@ ConvertToDTO convertToDTO;
     }
 
 
-    @Override
+    @Override //this get the competition and participant that plays in a competition
     public RankingDTO getParticipantRank(Competition code, Member participantId) {
         Ranking ranking = rankingRepository.findByCompetitionAndMember(code, participantId);
         if (ranking == null) {

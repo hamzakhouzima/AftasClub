@@ -50,9 +50,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> getMemberByCode(String code) {
+    public Member getMemberByCode(String code) {
         try{
-            List<Member> member = memberRepository.findMembersByIdentityNumber(code);
+            Member member = memberRepository.findByIdentityNumber(code);
             return member ;
         }catch(Exception e){
             System.out.println("error caused by "+e);
@@ -63,14 +63,14 @@ public class MemberServiceImpl implements MemberService {
 
 
 
-    public List<Member> findMembersByLastName(String identityNumber) {
+    public Member findMembersByIdentityNumber(String identityNumber) {
 
         try{
-            List<Member> members = memberRepository.findMembersByIdentityNumber(identityNumber);
+            Member members = memberRepository.findByIdentityNumber(identityNumber);
             return members;
         }catch(Exception e){
             System.out.println("error caused by "+e);
-            throw new MemberNotFoundException("Error caused by "+e);
+            throw new MemberNotFoundException("Members not found with identity number => "+e);
         }
 
     }

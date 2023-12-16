@@ -1,0 +1,9 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="object-contain">
+
+<!--  <app-cards></app-cards>-->
+  <router-outlet></router-outlet>
+  <app-profile *ngIf="isMemberDetailsRoute"></app-profile>
+</div>
+

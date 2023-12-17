@@ -17,6 +17,9 @@
               stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
+
+
+
   </div>
   <div class="bg-blue-300 shadow-lg pb-3 rounded-b-3xl">
     <div
@@ -144,4 +147,28 @@
       class="p-2 shadow-lg rounded-2xl tr-300 w-100 font-medium  bg-blue-300 rounded-md hover:bg-green-600 text-gray-50">Mejorar
       membresía</button></a>
   </div>
+</div>
+
+<div *ngIf="memberData">
+  <h2>Profile</h2>
+  <div>
+    <label>Name: </label>
+    <span>{{ memberData?.firstName }}</span>
+  </div>
+  <div>
+    <label>Email: </label>
+    <span>{{ memberData?.lastName }}</span>
+  </div>
+  <h2>Update Profile</h2>
+  <form (ngSubmit)="updateMember()">
+    <div>
+      <label>New Name: </label>
+      <input [(ngModel)]="newName" name="newName" type="text">
+    </div>
+    <div>
+      <label>New Email: </label>
+      <input [(ngModel)]="newLastName" name="newEmail" type="email">
+    </div>
+    <button type="submit">Update</button>
+  </form>
 </div>

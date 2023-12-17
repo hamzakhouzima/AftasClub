@@ -29,7 +29,7 @@ export class MemberService {
   }
 
   updateMember(member: Member): Observable<Member> {
-    return this.http.put<Member>(`${this.apiUrl}members/${member.id}`, member);
+    return this.http.put<Member>(`${this.apiUrl}/updateMember/${member.id}`, member);
   }
 
   deleteMember(id: number): Observable<void> {

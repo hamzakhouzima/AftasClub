@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import java.util.List;
 
 
@@ -30,6 +31,9 @@ public interface RankingRepository extends JpaRepository<Ranking, Long> {
 
     Ranking findByCompetitionIdAndMemberId(Long competitionId, Long memberId);
 
+
+//    @Query("SELECT r FROM Ranking r WHERE r.competition.id = :competitionId ORDER BY r.score DESC")
+//    List<Ranking> findTop3ByCompetitionIdOrderByScoreDesc(Long competitionId, Pageable pageable);
 
     @Query("SELECT r FROM Ranking r WHERE r.competition.id = :competitionId ORDER BY r.score DESC")
     List<Ranking> findTop3ByCompetitionIdOrderByScoreDesc(Long competitionId, Pageable pageable);

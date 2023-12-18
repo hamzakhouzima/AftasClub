@@ -8,8 +8,10 @@ import com.youcode.aftasclub.repository.LevelRepository;
 import com.youcode.aftasclub.repository.RankingRepository;
 import com.youcode.aftasclub.service.HuntingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,6 +153,7 @@ public class HuntingServiceImpl implements HuntingService {
             throw new RuntimeException("Error caused by "+e);
         }
     }
+
 
 
 

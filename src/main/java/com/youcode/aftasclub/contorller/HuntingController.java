@@ -2,6 +2,7 @@ package com.youcode.aftasclub.contorller;
 
 
 import com.youcode.aftasclub.dto.HuntingDTO;
+import com.youcode.aftasclub.dto.RankingDTO;
 import com.youcode.aftasclub.model.Competition;
 import com.youcode.aftasclub.model.Fish;
 import com.youcode.aftasclub.model.Hunting;
@@ -90,4 +91,7 @@ public class HuntingController {
 //                    .body(-1); // Return an error code or default value
         }
     }
+
+
+
 }

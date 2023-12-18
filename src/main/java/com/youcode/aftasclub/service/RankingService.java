@@ -5,6 +5,8 @@ import com.youcode.aftasclub.model.Competition;
 import com.youcode.aftasclub.model.Member;
 import com.youcode.aftasclub.model.Ranking;
 
+import java.util.List;
+
 public interface RankingService {
 
     void addParticipantToCompetition(Competition competitionId, Member participantID);
@@ -15,6 +17,6 @@ public interface RankingService {
     RankingDTO getParticipantRank(Competition code, Member participantId);
 
     Ranking updateParticipantRank(Ranking ranking);
-
+    List<Ranking> getTop3RankingsForCompetition(Long competitionId);
 
 }

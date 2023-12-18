@@ -2,7 +2,6 @@ package com.youcode.aftasclub.service.Impl;
 
 
 //import com.youcode.aftasclub.exception.RegisterationClosedException;
-import com.youcode.aftasclub.ToolKit.EntityDtoConverter;
 import com.youcode.aftasclub.dto.Converter.ConvertToDTO;
 import com.youcode.aftasclub.dto.RankingDTO;
 import com.youcode.aftasclub.exception.CompetitionNotFoundException;
@@ -14,14 +13,13 @@ import com.youcode.aftasclub.repository.CompetitionRepository;
 import com.youcode.aftasclub.repository.RankingRepository;
 import com.youcode.aftasclub.service.RankingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.StyledEditorKit;
+import java.awt.print.Pageable;
 import java.time.LocalTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RankingServiceImpl implements RankingService {
@@ -107,5 +105,11 @@ public class RankingServiceImpl implements RankingService {
     public Ranking updateParticipantRank(Ranking ranking) {
 
         return null;
+    }
+
+    @Override
+    public List<Ranking> getTop3RankingsForCompetition(Long competitionId) {
+        // Fetch top 3 rankings for the specified competition ID
+        return rankingRepository.findTop3ByCompetitionIdOrderByScoreDesc(competitionId,  PageRequest.of(0, 3));
     }
 }

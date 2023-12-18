@@ -3,19 +3,14 @@ package com.youcode.aftasclub.contorller;
 //import com.youcode.aftasclub.exception.RegisterationClosedException;
 import com.youcode.aftasclub.dto.RankingDTO;
 import com.youcode.aftasclub.exception.RegistrationClosedException;
-import com.youcode.aftasclub.model.Competition;
-import com.youcode.aftasclub.model.Member;
 import com.youcode.aftasclub.model.Ranking;
-import com.youcode.aftasclub.repository.RankingRepository;
-import com.youcode.aftasclub.service.CompetitionService;
 import com.youcode.aftasclub.service.RankingService;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 
 @RestController
@@ -53,6 +48,16 @@ public class RankingController {
             System.out.println("Error caused by " + e.toString());
             throw new RegistrationClosedException("Failed to update competition => Caused by " + e);
         }
+    }
+    @GetMapping("/top3/{competitionId}")
+    public ResponseEntity<List<Ranking>> getTop3RankingsForCompetition(@PathVariable Long competitionId) {
+        List<Ranking> top3Rankings = rankingService.getTop3RankingsForCompetition(competitionId);
+
+        if (top3Rankings.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        return ResponseEntity.ok(top3Rankings);
     }
 
 

@@ -19,12 +19,16 @@ public class Hunting {
     @Column(name = "fish_number")
     private Integer fishNumber;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fish_id")
     private Fish fish;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "competition_id")
+    private Competition competition;
 }

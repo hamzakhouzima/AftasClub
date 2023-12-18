@@ -27,20 +27,22 @@ public class RankingController {
 //    @Autowired
 //    CompetitionService competitionService;
 
-    @PostMapping("/add/participants")
+    @PostMapping("/addParticipant")
     public ResponseEntity<String> addParticipantToCompetition(
-            @RequestBody AddParticipantRequest request
-    ) {
+            @RequestBody AddParticipantRequest request) {
+
         try {
             rankingService.addParticipantToCompetition(request.getCompetition(), request.getMember());
-            return ResponseEntity.ok("Participant added to competition successfully");
+            return ResponseEntity.ok("Participant added to the competition successfully.");
         } catch (RegistrationClosedException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Participant is already registered in this competition: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to add participant to competition");
+                    .body("Failed to update competition: " + e.getMessage());
         }
     }
+
     @GetMapping("/participant/rank")
     public ResponseEntity<RankingDTO> getParticipantRank(
             @RequestBody AddParticipantRequest request) {

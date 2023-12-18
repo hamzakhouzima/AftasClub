@@ -1,19 +1,15 @@
 package com.youcode.aftasclub.model;
-
-
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
 @Table(name = "competitions")
 @Getter
 @Setter
-//@AllArgsConstructor
 public class Competition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,26 +19,29 @@ public class Competition {
     private String code;
 
     @Column
-    private Date date;
+    private String name;
 
     @Column
-    private Time startTime;
+    private LocalDate date; // Use LocalDate instead of Date
 
     @Column
-    private Time endTime;
+    private LocalTime startTime; // Use LocalTime instead of Time
+
+    @Column
+    private LocalTime endTime; // Use LocalTime instead of Time
 
     @Column
     private Integer numberOfParticipants;
 
     @Column
-    private String Location;
+    private String location; // Corrected lowercase "location"
 
     @Column
     private double amount;
 
+    @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL)
+    private List<Hunting> huntedFish;
 
 //    @OneToMany(mappedBy = "memberCompetitionDetails")
 //    private List<Member> members = new ArrayList<>();
-
-
-}
+    }

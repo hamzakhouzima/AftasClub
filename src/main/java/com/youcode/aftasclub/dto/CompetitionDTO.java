@@ -8,8 +8,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.sql.Time;
+//import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 
@@ -20,7 +21,7 @@ public class CompetitionDTO {
 
 
 
-//    private Long id;
+    private Long id = 0L;
 
 
 //    @NotBlank(message = "Name is required")
@@ -29,17 +30,17 @@ public class CompetitionDTO {
 
     @NotNull(message = "Date is required")
     @FutureOrPresent(message = "Date should be in the present or future")
-    private Date date;
+    private LocalDate  date;
 //    private Date date;
 
     @NotNull(message = "Start time is required")
     @FutureOrPresent(message = "Date should be in the present or future")
-    private Time startTime;
+    private LocalTime  startTime;
 
     @NotNull(message = "End time is required")
     @FutureOrPresent(message = "Date should be in the present or future")
 //    @GreaterThan(value = "startTime", message = "End time should be after start time")
-    private Time endTime;
+    private LocalTime  endTime;
 
     @Min(value = 2, message = "Number of participants should be at least 2")
     private Integer numberOfParticipants;

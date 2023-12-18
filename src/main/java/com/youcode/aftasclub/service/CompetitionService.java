@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface CompetitionService {
      void registerCompetition(CompetitionDTO competition);
 
-     Competition findCompetitionById(Long id);
+     Competition getCompetitionById(Long id);
 
      Competition updateCompetition(Competition updatedCompetition, String competitionCode);
 

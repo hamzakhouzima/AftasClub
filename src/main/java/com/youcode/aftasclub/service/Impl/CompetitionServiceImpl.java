@@ -15,9 +15,12 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.sql.Date;
+//import java.sql.Date;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -55,15 +58,22 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public void registerCompetition(CompetitionDTO competition) {
-        if (competitionRepository.existsByCode(competition.getCode())) {
-            throw new CompetitionNotFoundException("Competition Already exist:::");
-        } else {
-            competition.setCode(generateRandomString(7));
+        try {
+            LocalDate currentDate = LocalDate.now();
+            LocalDate competitionDate = competition.getDate(); // Assuming competition.getDate() returns a java.sql.Date
 
+            LocalDate localCompetitionDate = competitionDate;
 
-            competitionRepository.save(EDC.convertToEntity(competition , Competition.class));
-
-            //TODO : should set the code with random code using the bellow randomString method \/\/
+            if (competitionRepository.existsByCode(competition.getCode())) {
+                throw new CompetitionNotFoundException("Competition already exists");
+            } else if (localCompetitionDate.isBefore(currentDate)) {
+                throw new IllegalArgumentException("Competition date must be in the future or present");
+            } else {
+                competition.setCode(generateRandomString(7));
+                competitionRepository.save(EDC.convertToEntity(competition, Competition.class));
+            }
+        } catch (Exception e) {
+            throw new CompetitionNotFoundException("Error occurred while registering a competition " + e);
         }
     }
 
@@ -77,11 +87,11 @@ public class CompetitionServiceImpl implements CompetitionService {
     }
 
 
-    @Override
-    public Competition findCompetitionById(Long id) {
-
-            return null;
-    }
+//    @Override
+//    public Competition findCompetitionById(Long id) {
+//
+//            return null;
+//    }
 
 
 
@@ -169,10 +179,15 @@ public class CompetitionServiceImpl implements CompetitionService {
 
         return competitionRepository.findByEndTimeAfter(currentTime)
                 .stream()
-                .filter(competition -> competition.getDate().compareTo( Date.valueOf(currentDate)) >= 0)
+                .filter(competition -> competition.getDate().compareTo(Date.valueOf(currentDate).toLocalDate()) >= 0)
                 .collect(Collectors.toList());
     }
 
 
+    @Override
+    public Competition getCompetitionById(Long id) {
+        return competitionRepository.findById(id)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
+    }
 
 }

@@ -13,7 +13,7 @@ import java.util.Date;
 @ToString
 public class MemberDTO {
 
-    private Long id;
+    private Long id =0L;
 
     @NotBlank(message = "First name is required")
     private String firstName;

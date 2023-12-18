@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -27,19 +28,22 @@ public class MemberServiceImpl implements MemberService {
 
     CompetitionServiceImpl competitionService ;
 
-
+    Date currentDate = Date.from(LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC));
 
 
     @Override
     public void registerMember(MemberDTO member) throws DuplicateRegistrationException {
         //TODO : make this condition check if the member exists by last name and first name
-        if (memberRepository.existsById(member.getId())) {
+        //TODO : this could bug the code , go through it if something goes wrong
+
+        if (memberRepository.existsMemberByLastName(member.getLastName()) != null) {
             throw new DuplicateRegistrationException("Member already exists");
         }
 
         try {
             String r = CompetitionServiceImpl.generateRandomString(8);
             member.setMembershipNumber(r);
+            member.setDateOfJoining(currentDate);
 //            member.setDateOfJoining(new Date());
             Member member1 = EntityDtoConverter.convertMemberToEntity(member);
             memberRepository.save(member1);
@@ -58,9 +62,9 @@ public class MemberServiceImpl implements MemberService {
             System.out.println("error caused by "+e);
             throw new MemberNotFoundException("Error caused by "+e);
         }
-
-
     }
+
+
 
     @Override
     public Member getMemberByCode(String code) {

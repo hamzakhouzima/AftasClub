@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.StyledEditorKit;
+import java.time.LocalTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -36,40 +38,43 @@ public class RankingServiceImpl implements RankingService {
         //TODO : this should be done
 //    public Boolean beforeTwentyFourHours() {
 //        Date now = new Date();
-//        Date competitionStartDate = Competition.getStartTime() ;// get the competition start date here
+//        LocalTime competitionStartDate = Competition.getStartTime();// get the competition start date here
 //        long difference = competitionStartDate.getTime() - now.getTime();
 //        long twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
 //        return difference < twentyFourHoursInMillis;
 //    }
-//
 
 
-    @Override
-    public void addParticipantToCompetition(Competition competition, Member participant) {
+
+        @Override
+        public void addParticipantToCompetition(Competition competition, Member participant) {
 
 
-        try {
-            if (isParticipantInCompetition(competition, participant).size()>0) {
+            try {
+                if (isParticipantInCompetition(competition, participant).size() > 0 && competition.getEndTime().isBefore(LocalTime.now())) {
 
-                throw new RegistrationClosedException ("Participant is already registered in this competition");
+                    throw new RegistrationClosedException ("Participant is already registered in this competition");
+                }
+                    Ranking ranking = new Ranking();
+                    ranking.setCompetition(competition);
+                    ranking.setMember(participant);
+                    rankingRepository.save(ranking);
+
+            } catch (Exception e) {
+                System.out.println("Error caused by " + e);
+                throw new RegistrationClosedException("Failed to update competition => Caused by " + e);
             }
-                Ranking ranking = new Ranking();
-                ranking.setCompetition(competition);
-                ranking.setMember(participant);
-                rankingRepository.save(ranking);
 
-        } catch (Exception e) {
-            System.out.println("Error caused by " + e);
-            throw new RegistrationClosedException("Failed to update competition => Caused by " + e);
         }
-
-    }
 
 
     private List<Ranking> isParticipantInCompetition(Competition competition, Member participant) {
+        List<Ranking> rankings = (List<Ranking>) rankingRepository.findByCompetitionAndMember(competition, participant);
 
-         return (List<Ranking>) rankingRepository.findByCompetitionAndMember(competition, participant);
+        // Check if the returned list is null
+        return rankings != null ? rankings : Collections.emptyList();
     }
+
 
 
     @Override

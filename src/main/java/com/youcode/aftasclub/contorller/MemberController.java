@@ -60,6 +60,7 @@ private MemberServiceImpl memberService;
             System.out.println("Error caused by " + e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+
     }
 
 }

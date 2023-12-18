@@ -20,7 +20,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 //    List<Member> findMembersByIdentityNumber(@Param("identityNumber") String identityNumber);
 
     Member findByIdentityNumber(String identityNumber);
-
+    Member existsMemberByLastName(String lastName);
 
 //    @Query(name = "org.springframework.data.jpa.repository.query.Procedure")
 //    @Transactional

@@ -3,6 +3,7 @@ package com.youcode.aftasclub.contorller;
 
 import com.youcode.aftasclub.dto.CompetitionDTO;
 import com.youcode.aftasclub.exception.CompetitionNotFoundException;
+import com.youcode.aftasclub.exception.MemberNotFoundException;
 import com.youcode.aftasclub.model.Competition;
 import com.youcode.aftasclub.service.CompetitionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import static org.springframework.web.servlet.function.ServerResponse.ok;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200/")
 public class CompetitionController {
 
     @Autowired
@@ -62,6 +64,23 @@ public class CompetitionController {
 
 
 
+    @PostMapping("/{competitionId}/participants/{participantId}")
+    public ResponseEntity<String> addParticipantToCompetition(
+            @PathVariable("competitionId") Long competitionId,
+            @PathVariable("participantId") Long participantId) {
+
+        try {
+            competitionService.addParticipantToCompetition(competitionId, participantId);
+            return ResponseEntity.ok("Participant added successfully to the competition.");
+        } catch (CompetitionNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Competition not found: " + e.getMessage());
+        } catch (MemberNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Participant not found: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update competition: " + e.getMessage());
+        }
+    }
 
 
 }

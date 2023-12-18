@@ -1,13 +1,11 @@
 package com.youcode.aftasclub.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 
 @Getter
@@ -32,8 +30,8 @@ public class MemberDTO {
     @NotBlank(message = "Membership number is required")
     private String membershipNumber;
 
-    @NotNull(message = "Date of joining is required")
-    private LocalDate dateOfJoining;
+//    @NotBlank(message = "Date of joining is required")
+    private Date dateOfJoining;
 
 
 }

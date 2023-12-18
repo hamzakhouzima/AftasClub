@@ -6,11 +6,15 @@ import com.youcode.aftasclub.exception.DuplicateRegistrationException;
 import com.youcode.aftasclub.exception.MemberNotFoundException;
 import com.youcode.aftasclub.model.Member;
 import com.youcode.aftasclub.repository.MemberRepository;
+import com.youcode.aftasclub.service.CompetitionService;
 import com.youcode.aftasclub.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 
 @Service
@@ -21,19 +25,28 @@ public class MemberServiceImpl implements MemberService {
 
     EntityDtoConverter entityDtoConverter = new EntityDtoConverter();
 
+    CompetitionServiceImpl competitionService ;
+
 
 
 
     @Override
     public void registerMember(MemberDTO member) throws DuplicateRegistrationException {
+        //TODO : make this condition check if the member exists by last name and first name
         if (memberRepository.existsById(member.getId())) {
             throw new DuplicateRegistrationException("Member already exists");
         }
+
         try {
-            memberRepository.save(EntityDtoConverter.convertToEntity(member, Member.class));
+            String r = CompetitionServiceImpl.generateRandomString(8);
+            member.setMembershipNumber(r);
+//            member.setDateOfJoining(new Date());
+            Member member1 = EntityDtoConverter.convertMemberToEntity(member);
+            memberRepository.save(member1);
         } catch (Exception e) {
             throw new RuntimeException("Error occurred while registering member", e);
-        }    }
+        }
+    }
 
     @Override
     public Member getMemberById(Long id) {
@@ -80,21 +93,31 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void updateMember(Long id, Member updatedMember) {
-        try{
-            memberRepository.findById(id).ifPresent(member -> {
+        try {
+            Member member = memberRepository.findById(id)
+                    .orElseThrow(() -> new MemberNotFoundException("Member not found"));
 
+            if (updatedMember.getFirstName() != null) {
                 member.setFirstName(updatedMember.getFirstName());
+            }
+            if (updatedMember.getLastName() != null) {
                 member.setLastName(updatedMember.getLastName());
+            }
+            if (updatedMember.getAccessDate() != null) {
                 member.setAccessDate(updatedMember.getAccessDate());
+            }
+            if (updatedMember.getNationality() != null) {
                 member.setNationality(updatedMember.getNationality());
+            }
 
-                memberRepository.save(member);
-            });
-        }catch(Exception e){
-            System.out.println("error caused by "+e);
-            throw new MemberNotFoundException("Error caused by "+e);
+            memberRepository.save(member);
+        } catch (Exception e) {
+            System.out.println("Error caused by " + e);
+            throw new MemberNotFoundException("Error caused by " + e);
         }
     }
+
+
 
 
     @Override

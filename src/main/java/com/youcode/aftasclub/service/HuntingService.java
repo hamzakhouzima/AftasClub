@@ -23,4 +23,5 @@ public List<Hunting> getHuntingsByMember(Long id);
 
     public int getScore(Long memberId);
 
+//    findByCompetitionIdAndMemberId
 }

@@ -14,4 +14,7 @@ public interface HuntingRepository extends JpaRepository<Hunting, Long> {
 
     @Query("SELECT h FROM Hunting h WHERE h.member.id = :memberId")
     List<Hunting> findHuntedFishByMemberId(Long memberId);
+
+
+    public Hunting findByCompetitionIdAndMemberIdAndFishId(Long competitionId, Long memberId , Long fishId);
 }

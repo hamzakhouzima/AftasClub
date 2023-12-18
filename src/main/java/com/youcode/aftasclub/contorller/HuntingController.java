@@ -56,19 +56,19 @@ public class HuntingController {
             int fishNumber = request.getFishNumber();
             Long competitionId = request.getCompetition_id();
 
-            // Fetch member and fish entities using their IDs
             Member member = memberService.getMemberById(memberId);
             Fish fish = fishService.getFishById(fishId);
             Competition competition = competitionService.getCompetitionById(competitionId);
 
-            // Create a new Hunting entity
+
+            // make  a new Hunting entity
             Hunting huntingEvent = new Hunting();
             huntingEvent.setFishNumber(fishNumber);
             huntingEvent.setFish(fish);
             huntingEvent.setMember(member);
             huntingEvent.setCompetition(competition);
 
-            // Save the hunting event
+            // save the hunting
             huntingService.saveHunting(huntingEvent);
 
             return ResponseEntity.ok("Hunting event saved successfully.");

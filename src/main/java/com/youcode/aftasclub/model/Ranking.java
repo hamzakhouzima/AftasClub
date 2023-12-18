@@ -24,8 +24,9 @@ public class Ranking {
     private Integer rank;
 
 
-    @Column(name = "score")
-    private Integer score;
+    @Column(nullable = false)
+    private Integer score = 0; // I
+
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

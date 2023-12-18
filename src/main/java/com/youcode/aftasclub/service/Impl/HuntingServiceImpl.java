@@ -1,13 +1,11 @@
 package com.youcode.aftasclub.service.Impl;
 
 import com.youcode.aftasclub.dto.HuntingDTO;
-import com.youcode.aftasclub.model.Fish;
-import com.youcode.aftasclub.model.Hunting;
-import com.youcode.aftasclub.model.Level;
-import com.youcode.aftasclub.model.Member;
+import com.youcode.aftasclub.model.*;
 import com.youcode.aftasclub.repository.FishRepository;
 import com.youcode.aftasclub.repository.HuntingRepository;
 import com.youcode.aftasclub.repository.LevelRepository;
+import com.youcode.aftasclub.repository.RankingRepository;
 import com.youcode.aftasclub.service.HuntingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +24,10 @@ public class HuntingServiceImpl implements HuntingService {
 
     @Autowired
     private FishRepository fishRepository;
+
+    @Autowired
+    private RankingRepository rankingRepository;
+
     public HuntingServiceImpl(HuntingRepository huntingRepository) {
 
     }
@@ -33,13 +35,47 @@ public class HuntingServiceImpl implements HuntingService {
     @Override
     public void saveHunting(Hunting hunting) {
         try {
-            huntingRepository.save(hunting);
+            updateExistingOrSaveNewHunting(hunting);
 
-        }catch(Exception e){
-            System.out.println("error caused by "+e);
-            throw new RuntimeException("Error caused by "+e);
+            int pointsForFish = calculatePointsForHuntedFish(hunting.getFish().getId());
+            updateOrCreateRanking(hunting, pointsForFish);
+        } catch (Exception e) {
+            handleException(e);
         }
     }
+
+    private void updateExistingOrSaveNewHunting(Hunting hunting) {
+        Hunting existingHunting = huntingRepository.findByCompetitionIdAndMemberIdAndFishId(
+                hunting.getCompetition().getId(), hunting.getMember().getId(), hunting.getFish().getId());
+
+        if (existingHunting != null) {
+            int currentFishNumber = existingHunting.getFishNumber();
+            existingHunting.setFishNumber(currentFishNumber + hunting.getFishNumber());
+            huntingRepository.save(existingHunting);
+        } else {
+            huntingRepository.save(hunting);
+        }
+    }
+
+    private void updateOrCreateRanking(Hunting hunting, int pointsForFish) {
+        Ranking ranking = rankingRepository.findByCompetitionIdAndMemberId(
+                hunting.getCompetition().getId(), hunting.getMember().getId());
+
+        if (ranking != null) {
+            ranking.setScore(ranking.getScore() + pointsForFish);
+            rankingRepository.save(ranking);
+        } else {
+            System.out.println("Ranking entry not found for member in the competition.");
+            // Handle the case where the ranking entry doesn't exist
+            // This might include logging, error handling, or any specific action needed.
+        }
+    }
+
+    private void handleException(Exception e) {
+        System.out.println("Error caused by " + e);
+        throw new RuntimeException("Error caused by " + e);
+    }
+
 
     @Override
     public Member getMemberById(Long id) {
@@ -115,6 +151,7 @@ public class HuntingServiceImpl implements HuntingService {
             throw new RuntimeException("Error caused by "+e);
         }
     }
+
 
 
 

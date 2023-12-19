@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -50,15 +51,36 @@ public class RankingController {
         }
     }
     @GetMapping("/top3/{competitionId}")
-    public ResponseEntity<List<Ranking>> getTop3RankingsForCompetition(@PathVariable Long competitionId) {
+    public ResponseEntity<List<RankingDTO>> getTop3RankingsForCompetition(@PathVariable Long competitionId) {
         List<Ranking> top3Rankings = rankingService.getTop3RankingsForCompetition(competitionId);
 
         if (top3Rankings.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        return ResponseEntity.ok(top3Rankings);
+        // Convert Ranking entities to DTOs
+        List<RankingDTO> top3RankingsDTO = top3Rankings.stream()
+                .map(this::convertToRankingDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(top3RankingsDTO);
     }
+
+    // Converter method from Ranking to RankingDTO
+    private RankingDTO convertToRankingDTO(Ranking ranking) {
+
+
+        RankingDTO rankingDTO = new RankingDTO();
+        rankingDTO.setId(ranking.getId());
+        rankingDTO.setRank(ranking.getRank());
+        rankingDTO.setScore(ranking.getScore());
+        rankingDTO.setMemberId(ranking.getMember().getId());
+        rankingDTO.setCompetitionId(ranking.getCompetition().getId());
+        // Other mapping if needed
+
+        return rankingDTO;
+    }
+
 
 
 //    @DeleteMapping("delete/{competitionId}/participants/{participantId}")

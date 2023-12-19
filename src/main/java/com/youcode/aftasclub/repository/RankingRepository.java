@@ -38,4 +38,9 @@ public interface RankingRepository extends JpaRepository<Ranking, Long> {
     @Query("SELECT r FROM Ranking r WHERE r.competition.id = :competitionId ORDER BY r.score DESC")
     List<Ranking> findTop3ByCompetitionIdOrderByScoreDesc(Long competitionId, Pageable pageable);
 
+    Boolean existsByMemberIdAndId(Long member, Long competitionId);
+    Ranking findByMemberIdAndCompetitionId(Long memberId, Long competitionId);
+
+
+
 }

@@ -112,4 +112,13 @@ public class RankingServiceImpl implements RankingService {
         // Fetch top 3 rankings for the specified competition ID
         return rankingRepository.findTop3ByCompetitionIdOrderByScoreDesc(competitionId,  PageRequest.of(0, 3));
     }
+    @Override
+    public Ranking getRankingByMemberAndCompetition(Long memberId, Long competitionId) {
+        return rankingRepository.findByMemberIdAndCompetitionId(memberId, competitionId);
+    }
+    @Override
+    public void updateRanking(Ranking ranking) {
+        rankingRepository.save(ranking);
+    }
+
 }

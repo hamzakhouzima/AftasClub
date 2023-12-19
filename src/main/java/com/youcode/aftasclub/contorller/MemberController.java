@@ -35,14 +35,13 @@ private MemberServiceImpl memberService;
     }
 
     @GetMapping("/searchMember/{identityNumber}")
-    public ResponseEntity<Member> getMemberByCode(@PathVariable String identityNumber) {
+    public ResponseEntity<MemberDTO> getMemberByCode(@PathVariable String identityNumber) {
         try {
-            System.out.println(identityNumber);
-            Member member = memberService.getMemberByCode(identityNumber);
-            if (member == null) {
+            MemberDTO memberDTO = memberService.getMemberByCode(identityNumber);
+            if (memberDTO == null) {
                 return ResponseEntity.notFound().build();
             } else {
-                return ResponseEntity.ok(member);
+                return ResponseEntity.ok(memberDTO);
             }
         } catch (Exception e) {
             System.out.println("Error caused by " + e);
@@ -51,7 +50,7 @@ private MemberServiceImpl memberService;
     }
 
 
-    @PutMapping ("/updateMember/{memberId}")
+        @PutMapping ("/updateMember/{memberId}")
     public ResponseEntity<Member> updateMember(@PathVariable Long memberId, @RequestBody Member member) {
         try {
             memberService.updateMember(memberId, member);

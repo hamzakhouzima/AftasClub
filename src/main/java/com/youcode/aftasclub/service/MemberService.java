@@ -12,7 +12,7 @@ public interface MemberService {
 
     Member getMemberById(Long id);
 
-    Member getMemberByCode(String code);
+    MemberDTO getMemberByCode(String code);
 
     void updateMember(Long id, Member member);
 

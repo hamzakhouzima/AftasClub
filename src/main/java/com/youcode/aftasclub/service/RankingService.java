@@ -19,4 +19,8 @@ public interface RankingService {
     Ranking updateParticipantRank(Ranking ranking);
     List<Ranking> getTop3RankingsForCompetition(Long competitionId);
 
+     Ranking getRankingByMemberAndCompetition(Long memberId, Long competitionId);
+//    Ranking getRankingByMemberAndCompetition(Long m , Long c);
+
+     void updateRanking(Ranking ranking) ;
 }

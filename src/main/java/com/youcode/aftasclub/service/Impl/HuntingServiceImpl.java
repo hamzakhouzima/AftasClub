@@ -2,10 +2,7 @@ package com.youcode.aftasclub.service.Impl;
 
 import com.youcode.aftasclub.dto.HuntingDTO;
 import com.youcode.aftasclub.model.*;
-import com.youcode.aftasclub.repository.FishRepository;
-import com.youcode.aftasclub.repository.HuntingRepository;
-import com.youcode.aftasclub.repository.LevelRepository;
-import com.youcode.aftasclub.repository.RankingRepository;
+import com.youcode.aftasclub.repository.*;
 import com.youcode.aftasclub.service.HuntingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +26,12 @@ public class HuntingServiceImpl implements HuntingService {
 
     @Autowired
     private RankingRepository rankingRepository;
+    private final CompetitionRepository competitionRepository;
 
-    public HuntingServiceImpl(HuntingRepository huntingRepository) {
+    public HuntingServiceImpl(HuntingRepository huntingRepository,
+                              CompetitionRepository competitionRepository) {
 
+        this.competitionRepository = competitionRepository;
     }
 
     @Override
@@ -143,6 +143,11 @@ public class HuntingServiceImpl implements HuntingService {
     }
 
     @Override
+    public Hunting findByCompetitionIdAndMemberIdAndFishId(Long competitionId, Long memberId) {
+        return null;
+    }
+
+    @Override
     public List<Hunting> getHuntingsByMember(Long id) {
         try{
 //            Hunting MemberHunting = (Hunting) huntingRepository.findHuntedFishByMemberId(id);
@@ -154,7 +159,12 @@ public class HuntingServiceImpl implements HuntingService {
         }
     }
 
+@Override
+public Boolean isMemberRegisteredInCompetition(Long memberId, Long competitionId) {
 
+    return rankingRepository.existsByMemberIdAndId(memberId, competitionId) != null;
+
+}
 
 
 

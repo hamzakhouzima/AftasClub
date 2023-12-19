@@ -23,5 +23,11 @@ public List<Hunting> getHuntingsByMember(Long id);
 
     public int getScore(Long memberId);
 
+    public Hunting findByCompetitionIdAndMemberIdAndFishId(Long competitionId, Long memberId);
 //    findByCompetitionIdAndMemberId
-}
+
+//    findByCompetitionIdAndMemberIdAndFishId
+//    Boolean isMemberRegisteredInCompetition(Long );
+    public Boolean isMemberRegisteredInCompetition(Long memberId, Long competitionId) ;
+
+    }

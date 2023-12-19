@@ -66,15 +66,42 @@ public class MemberServiceImpl implements MemberService {
 
 
 
+//    @Override
+//    public Member getMemberByCode(String code) {
+//        try{
+//            Member member = memberRepository.findByIdentityNumber(code);
+//            return member ;
+//        }catch(Exception e){
+//            System.out.println("error caused by "+e);
+//            throw new MemberNotFoundException("Error caused by "+e);
+//        }
+//    }
     @Override
-    public Member getMemberByCode(String code) {
-        try{
+    public MemberDTO getMemberByCode(String code) {
+        try {
             Member member = memberRepository.findByIdentityNumber(code);
-            return member ;
-        }catch(Exception e){
-            System.out.println("error caused by "+e);
-            throw new MemberNotFoundException("Error caused by "+e);
+            // Map the Member entity to MemberDTO
+            MemberDTO memberDTO = mapToMemberDTO(member);
+            return memberDTO;
+        } catch (Exception e) {
+            System.out.println("Error caused by " + e);
+            throw new MemberNotFoundException("Error caused by " + e);
         }
+    }
+
+    // Map Member entity to MemberDTO
+    private MemberDTO mapToMemberDTO(Member member) {
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setId(member.getId());
+        memberDTO.setFirstName(member.getFirstName());
+        memberDTO.setLastName(member.getLastName());
+        memberDTO.setDateOfJoining(member.getAccessDate());
+        memberDTO.setNationality(member.getNationality());
+        memberDTO.setMembershipNumber(member.getIdentityNumber());
+//        memberDTO.setMembershipNumber();
+        // Map other fields as needed
+
+        return memberDTO;
     }
 
 

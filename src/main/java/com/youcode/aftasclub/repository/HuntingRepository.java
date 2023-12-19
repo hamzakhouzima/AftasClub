@@ -16,5 +16,7 @@ public interface HuntingRepository extends JpaRepository<Hunting, Long> {
     List<Hunting> findHuntedFishByMemberId(Long memberId);
 
 
-    public Hunting findByCompetitionIdAndMemberIdAndFishId(Long competitionId, Long memberId , Long fishId);
+    Boolean existsByMemberIdAndId(Long memberId, Long rankingId);
+
+    Hunting findByCompetitionIdAndMemberIdAndFishId(Long competitonid , Long x, Long y);
 }

@@ -3,14 +3,8 @@ package com.youcode.aftasclub.contorller;
 
 import com.youcode.aftasclub.dto.HuntingDTO;
 import com.youcode.aftasclub.dto.RankingDTO;
-import com.youcode.aftasclub.model.Competition;
-import com.youcode.aftasclub.model.Fish;
-import com.youcode.aftasclub.model.Hunting;
-import com.youcode.aftasclub.model.Member;
-import com.youcode.aftasclub.service.CompetitionService;
-import com.youcode.aftasclub.service.FishService;
-import com.youcode.aftasclub.service.HuntingService;
-import com.youcode.aftasclub.service.MemberService;
+import com.youcode.aftasclub.model.*;
+import com.youcode.aftasclub.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +28,8 @@ public class HuntingController {
     @Autowired
     private CompetitionService competitionService;
 
+    @Autowired
+    private RankingService rankingService;
 
 
     @GetMapping("/hunting")
@@ -48,7 +44,6 @@ public class HuntingController {
         return ResponseEntity.badRequest().build();
     }
 
-
     @PostMapping("/saveHuntingEvent")
     public ResponseEntity<String> saveHuntingEvent(@RequestBody AddHuntingRequest request) {
         try {
@@ -59,18 +54,34 @@ public class HuntingController {
 
             Member member = memberService.getMemberById(memberId);
             Fish fish = fishService.getFishById(fishId);
+
+            // Access level information directly from Fish
+            Level level = fish.getLevel();
+
+            // If level exists, get the points
+            int fishPoints = (level != null) ? level.getPoints() : 0;
+
             Competition competition = competitionService.getCompetitionById(competitionId);
 
-
-            // make  a new Hunting entity
+            // Make a new Hunting entity
             Hunting huntingEvent = new Hunting();
             huntingEvent.setFishNumber(fishNumber);
             huntingEvent.setFish(fish);
             huntingEvent.setMember(member);
             huntingEvent.setCompetition(competition);
 
-            // save the hunting
+            // Save the hunting event
             huntingService.saveHunting(huntingEvent);
+
+            // Update the ranking
+            Ranking ranking = rankingService.getRankingByMemberAndCompetition(memberId, competitionId);
+            if (ranking != null) {
+                // Increment the score by fish points
+                ranking.setScore(ranking.getScore() + fishPoints);
+
+                // Update the ranking
+                rankingService.updateRanking(ranking);
+            }
 
             return ResponseEntity.ok("Hunting event saved successfully.");
         } catch (Exception e) {

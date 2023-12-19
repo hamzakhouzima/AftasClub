@@ -25,5 +25,9 @@ public interface CompetitionService {
 
      List<Competition> getOnGoingCompetition();
 
+     List<CompetitionDTO> getAllCompetitions();
      Competition findCompetitionByCode(String code);
+
+     public List<CompetitionDTO> getOngoingCompetitions();
+     public List<CompetitionDTO> getDoneCompetitions();
 }

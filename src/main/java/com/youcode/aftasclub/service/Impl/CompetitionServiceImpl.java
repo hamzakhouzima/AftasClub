@@ -16,11 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 //import java.sql.Date;
-import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -189,5 +187,67 @@ public class CompetitionServiceImpl implements CompetitionService {
         return competitionRepository.findById(id)
                 .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
     }
+
+
+    @Override
+    public List<CompetitionDTO> getAllCompetitions() {
+        try {
+            List<Competition> competitions = competitionRepository.findAll();
+            List<CompetitionDTO> competitionDTOs = new ArrayList<>();
+
+            for (Competition competition : competitions) {
+                CompetitionDTO competitionDTO = mapToCompetitionDTO(competition);
+                competitionDTOs.add(competitionDTO);
+            }
+            return competitionDTOs;
+        } catch (Exception e) {
+            throw new CompetitionNotFoundException("There are no competitions");
+        }
+    }
+    @Override
+    public List<CompetitionDTO> getOngoingCompetitions() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Competition> ongoingCompetitions = competitionRepository.findAll()
+                .stream()
+                .filter(competition -> competition.getStartTime().isBefore(LocalTime.from(now))
+                        && competition.getEndTime().isAfter(LocalTime.from(now)))
+                .collect(Collectors.toList());
+
+        // Map Competition entities to CompetitionDTOs
+//        return (List<CompetitionDTO>) EntityDtoConverter.convertToDto(ongoingCompetitions,Competition.class);
+        return ongoingCompetitions.stream()
+                .map(this::mapToCompetitionDTO)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<CompetitionDTO> getDoneCompetitions() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Competition> doneCompetitions = competitionRepository.findAll()
+                .stream()
+                .filter(competition -> competition.getEndTime().isBefore(LocalTime.from(now)))
+                .collect(Collectors.toList());
+
+        // Map Competition entities to CompetitionDTOs
+        return doneCompetitions.stream()
+                .map(this::mapToCompetitionDTO)
+                .collect(Collectors.toList());
+//        return (List<CompetitionDTO>) EntityDtoConverter.convertToDto(doneCompetitions,Competition.class);
+    }
+
+
+    private CompetitionDTO mapToCompetitionDTO(Competition competition) {
+        CompetitionDTO competitionDTO = new CompetitionDTO();
+        competitionDTO.setId(competition.getId());
+        competitionDTO.setCode(competition.getCode());
+        competitionDTO.setDate(competition.getDate());
+        competitionDTO.setStartTime(competition.getStartTime());
+        competitionDTO.setEndTime(competition.getEndTime());
+        competitionDTO.setNumberOfParticipants(competition.getNumberOfParticipants());
+        competitionDTO.setLocation(competition.getLocation());
+        // Map other fields as needed
+
+        return competitionDTO;
+    }
+
 
 }

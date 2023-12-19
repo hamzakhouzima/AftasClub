@@ -11,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
-import static org.springframework.web.servlet.function.ServerResponse.ok;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200/")
@@ -62,6 +60,36 @@ public class CompetitionController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
 
+    @GetMapping("/competitions")
+    public ResponseEntity<List<CompetitionDTO>> getAllCompetitions() {
+        try {
+            List<CompetitionDTO> competitions = competitionService.getAllCompetitions();
+            return ResponseEntity.ok(competitions);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+    @GetMapping("/competitions/ongoing")
+    public ResponseEntity<List<CompetitionDTO>> getOnGoingCompetitions() {
+        try {
+            List<CompetitionDTO> competitions = competitionService.getOngoingCompetitions();
+            return ResponseEntity.ok(competitions);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+  @GetMapping("/competitions/Done")
+    public ResponseEntity<List<CompetitionDTO>> getDoneCompetitions() {
+        try {
+            List<CompetitionDTO> competitions = competitionService.getOngoingCompetitions();
+            return ResponseEntity.ok(competitions);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
 
     @PostMapping("/{competitionId}/participants/{participantId}")
